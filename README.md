@@ -6,11 +6,11 @@
 
 ## Автор
 
-Университет: [ITMO University](https://itmo.ru/ru/)
-Факультет: [FICT](https://fict.itmo.ru)
-Курс: [Введение в маршрутизацию](https://github.com/itmo-ict-faculty/introduction-in-routing)
-Год: 2023/2024
-Группа: K3322
-Студент: Титов Георгий Константинович
+Университет: [ITMO University](https://itmo.ru/ru/)  
+Факультет: [ФПиН](https://fict.itmo.ru)  
+Курс: [Введение в маршрутизацию](https://github.com/itmo-ict-faculty/introduction-in-routing)  
+Год: 2023/2024  
+Группа: K3322  
+Студент: Титов Георгий Константинович  
 
 ## Лабораторные работы
