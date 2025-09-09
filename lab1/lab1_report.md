@@ -3,7 +3,7 @@
 ## Шапка отчета
 
 * University: [ITMO University](https://itmo.ru/ru/)
-* Faculty: [FICT](https://fict.itmo.ru)
+* Faculty: [ФПиН](https://fict.itmo.ru)
 * Course: [Introduction in routing](https://github.com/itmo-ict-faculty/introduction-in-routing)
 * Year: 2025/2026
 * Group: K3322
@@ -22,7 +22,7 @@
 
 ## Задание
 
-Вам необходимо сделать трехуровневую сеть связи классического предприятия изображенную на рисунке 1 в ContainerLab. Необходимо создать все устройства указанные на схеме и соединения между ними, правила работы с СontainerLab можно изучить по [ссылке}(https://containerlab.dev/quickstart/).
+Вам необходимо сделать трехуровневую сеть связи классического предприятия изображенную на рисунке 1 в ContainerLab. Необходимо создать все устройства указанные на схеме и соединения между ними, правила работы с СontainerLab можно изучить по [ссылке](https://containerlab.dev/quickstart/).
 
 <img width="411" height="291" alt="image" src="https://github.com/user-attachments/assets/154540a7-11e4-4d80-aaa8-c7da83da9cf7" />
 
