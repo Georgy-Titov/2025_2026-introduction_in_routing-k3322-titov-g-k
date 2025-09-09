@@ -3,7 +3,7 @@
 ## Шапка отчета
 
 * University: [ITMO University](https://itmo.ru/ru/)
-* Faculty: [ФПиН](https://fict.itmo.ru)
+* Faculty: [ФПиН](https://fpin.itmo.ru/ru)
 * Course: [Introduction in routing](https://github.com/itmo-ict-faculty/introduction-in-routing)
 * Year: 2025/2026
 * Group: K3322
