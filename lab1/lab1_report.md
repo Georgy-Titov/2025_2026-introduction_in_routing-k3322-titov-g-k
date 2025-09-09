@@ -34,3 +34,168 @@
 * Настроить имена устройств, сменить логины и пароли.
 
 ## Выполнение работы
+
+### Топология
+
+В файле lab1_network.yaml описана топология сети. Она включает маршрутизатор `R1`, три коммутатора (`SW1`, `SW2`, `SW3`), а также два конечных устройства (`PC1` и `PC2`). Каждый узел имеет свой файл конфигурации (в папке `configs`, который загружается при старте контейнера).
+
+```
+name: lab_1
+
+mgmt:
+  network: statics
+  ipv4-subnet: 192.168.0.0/24
+
+topology:
+  nodes:
+    R1:
+      kind: vr-mikrotik_ros
+      image: vrnetlab/mikrotik_routeros:6.47.9
+      mgmt-ipv4: 192.168.0.1
+      startup-config: ./configs/r1.rsc
+
+    SW1:
+      kind: vr-ros
+      image: vrnetlab/mikrotik_routeros:6.47.9
+      mgmt-ipv4: 192.168.0.2
+      startup-config: ./configs/sw1.rsc
+
+    SW2:
+      kind: vr-ros
+      image: vrnetlab/mikrotik_routeros:6.47.9
+      mgmt-ipv4: 192.168.0.3
+      startup-config: ./configs/sw2.rsc
+
+    SW3:
+      kind: vr-ros
+      image: vrnetlab/mikrotik_routeros:6.47.9
+      mgmt-ipv4: 192.168.0.4
+      startup-config: ./configs/sw3.rsc
+
+    PC1:
+      kind: linux
+      image: alpine:latest
+      binds:
+        - ./configs:/configs
+      mgmt-ipv4: 192.168.0.5
+      exec:
+        - sh /configs/PC1.sh
+
+    PC2:
+      kind: linux
+      image: alpine:latest
+      binds:
+        - ./configs:/configs
+      mgmt-ipv4: 192.168.0.6
+      exec:
+        - sh /configs/PC2.sh
+
+  links:
+    - endpoints: ["R1:eth1", "SW1:eth1"]
+    - endpoints: ["SW1:eth2", "SW2:eth1"]
+    - endpoints: ["SW1:eth3", "SW3:eth1"]
+    - endpoints: ["SW2:eth2", "PC1:eth1"]
+    - endpoints: ["SW3:eth2", "PC2:eth1"]
+```
+
+Ниже можно ознакомиться с графическим представлением этой схемы (а также с разделением VLAN'ов):
+
+### Настройка маршрутизатора R1
+
+На маршрутизаторе `R1` настроены два VLAN-а — `VLAN 10` и `VLAN 20`. Каждый из этих VLAN используется для разделения трафика между двумя сегментами сети, к которым подключены `PC1` и `PC2`. Для каждого VLAN настроен DHCP-сервер, который автоматически раздаёт IP-адреса устройствам в соответствующих VLAN. Дополнительно был создан новый пользователь с административными правами и изменено имя устройства.
+
+Конфиг для настройки `R1`:
+
+```
+/interface vlan
+add name=vlan10 vlan-id=10 interface=ether1
+add name=vlan20 vlan-id=20 interface=ether1
+/ip address
+add address=10.10.10.1/24 interface=vlan10
+add address=10.10.20.1/24 interface=vlan20
+/ip pool
+add name=dhcp_pool_vlan10 ranges=10.10.10.2-10.10.10.254
+add name=dhcp_pool_vlan20 ranges=10.10.20.2-10.10.20.254
+/ip dhcp-server
+add name=dhcp_vlan10 interface=vlan10 address-pool=dhcp_pool_vlan10 disabled=no
+add name=dhcp_vlan20 interface=vlan20 address-pool=dhcp_pool_vlan20 disabled=no
+/ip dhcp-server network
+add address=10.10.10.0/24 gateway=10.10.10.1
+add address=10.10.20.0/24 gateway=10.10.20.1
+/user add name=georgy password=admin group=full
+/system identity set name=R1-Router
+```
+
+### Настройка коммутатора SW1
+
+На `SW1` добавлены VLAN-интерфейсы для разных портов и созданы мосты для `VLAN 10` и `VLAN 20`, обеспечивающие передачу трафика между соответствующими интерфейсами. Для каждого VLAN настроен клиент DHCP.
+
+Конфиг для настройки `SW1`:
+
+```
+/interface vlan
+add name=vlan10_e1 vlan-id=10 interface=ether1
+add name=vlan20_e1 vlan-id=20 interface=ether1
+add name=vlan10_e2 vlan-id=10 interface=ether2
+add name=vlan20_e3 vlan-id=20 interface=ether3
+/interface bridge
+add name=br_v10
+add name=br_v20
+/interface bridge port
+add interface=vlan10_e1 bridge=br_v10
+add interface=vlan10_e2 bridge=br_v10
+add interface=vlan20_e1 bridge=br_v20
+add interface=vlan20_e3 bridge=br_v20
+/ip dhcp-client
+add disabled=no interface=br_v20
+add disabled=no interface=br_v10
+/user add name=georgy password=admin group=full
+/system identity set name=SW1-Switch
+```
+
+### Настройка коммутаторов SW2 и SW3
+
+Конфигурация аналогична: VLAN-интерфейсы и мосты для своих портов, плюс DHCP-клиенты.
+
+Пример конфига для настройки `SW2`:
+
+```
+/interface vlan
+add name=vlan10_e1 vlan-id=10 interface=ether1
+add name=vlan10_e2 vlan-id=10 interface=ether2
+/interface bridge
+add name=br_v10
+/interface bridge port
+add interface=vlan10_e1 bridge=br_v10
+add interface=vlan10_e2 bridge=br_v10
+/ip dhcp-client
+add disabled=no interface=br_v10
+/user add name=georgy password=adminn group=full
+/system identity set name=SW2-Switch
+```
+
+### Настройка конечных устройств PC1, PC2
+
+`PC1` и `PC2` настраиваются для работы в своих VLAN, создаются подинтерфейсы и задаются IP-адреса.
+
+Пример конфига для `PC1`:
+
+```
+#!/bin/sh
+ip link add link eth1 name vlan10 type vlan id 10
+ip link set vlan10 up
+dhclient vlan10
+```
+
+Пример конфига для `PC2`:
+
+```
+#!/bin/sh
+ip link add link eth1 name vlan20 type vlan id 20
+ip link set vlan20 up
+dhclient vlan20
+```
+
+## Проверка работспособности сети
+
+## Заключение
