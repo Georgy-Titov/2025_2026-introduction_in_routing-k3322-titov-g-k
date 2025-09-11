@@ -8,5 +8,5 @@ add interface=vlan20_e1 bridge=br_v20
 add interface=vlan20_e2 bridge=br_v20
 /ip dhcp-client
 add disabled=no interface=br_v20
-/user add name=georgy password=adminn group=full
+/user add name=georgy password=admin group=full
 /system identity set name=SW2-Switch

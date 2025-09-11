@@ -9,7 +9,7 @@ topology:
     R1:
       kind: vr-mikrotik_ros
       image: vrnetlab/mikrotik_routeros:6.47.9
-      mgmt-ipv4: 192.168.120.1
+      mgmt-ipv4: 192.168.120.100
       startup-config: ./configs/r1.rsc
 
     SW1:
@@ -37,7 +37,7 @@ topology:
         - ./configs:/configs
       mgmt-ipv4: 192.168.120.5
       exec:
-        - sh /configs/PC1.sh
+        - sh /configs/pc1.sh
 
     PC2:
       kind: linux
@@ -46,7 +46,7 @@ topology:
         - ./configs:/configs
       mgmt-ipv4: 192.168.120.6
       exec:
-        - sh /configs/PC2.sh
+        - sh /configs/pc2.sh
 
   links:
     - endpoints: ["R1:eth1", "SW1:eth1"]
