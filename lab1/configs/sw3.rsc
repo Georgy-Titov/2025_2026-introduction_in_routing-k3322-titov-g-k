@@ -1,12 +1,15 @@
-/interface vlan
-add name=vlan20_e1 vlan-id=10 interface=ether1
-add name=vlan20_e2 vlan-id=10 interface=ether2
-/interface bridge
-add name=br_v20
-/interface bridge port
-add interface=vlan20_e1 bridge=br_v20
-add interface=vlan20_e2 bridge=br_v20
-/ip dhcp-client
-add disabled=no interface=br_v20
-/user add name=georgy password=admin group=full
 /system identity set name=SW2-Switch
+/user add name=georgy password=strongpass group=full
+
+/interface bridge
+add name=br-edge vlan-filtering=yes
+
+/interface bridge port
+add bridge=br-edge interface=ether1   
+add bridge=br-edge interface=ether2   
+
+/interface bridge vlan
+add bridge=br-edge vlan-ids=10 tagged=ether1 untagged=ether2
+
+/interface bridge port
+set [find interface=ether2] pvid=10

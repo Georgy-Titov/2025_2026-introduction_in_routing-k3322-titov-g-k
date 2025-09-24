@@ -1,4 +1,5 @@
 #!/bin/sh
-ip link add link eth1 name vlan20 type vlan id 20
-ip link set vlan20 up
-udhcpс vlan20
+set -e
+ip link set eth1 up
+
+dhclient -v eth1 || exit 0
