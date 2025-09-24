@@ -2,8 +2,8 @@
 /user add name=georgy password=strongpass group=full
 
 /interface vlan
-add name=vlan10 vlan-id=10 interface=ether1
-add name=vlan20 vlan-id=20 interface=ether1
+add name=vlan10 vlan-id=10 interface=ether2
+add name=vlan20 vlan-id=20 interface=ether2
 
 /ip address
 add address=10.10.10.1/24 interface=vlan10
