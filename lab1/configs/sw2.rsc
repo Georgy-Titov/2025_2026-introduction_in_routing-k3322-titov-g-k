@@ -5,8 +5,8 @@
 add name=br-edge vlan-filtering=yes
 
 /interface vlan 
-add name=vlan10 vlan-id=10 interface=br_edge
-add name=vlan20 vlan-id=20 interface=br_edge
+add name=vlan10 vlan-id=10 interface=br-edge
+add name=vlan20 vlan-id=20 interface=br-edge
 
 /interface bridge port
 add bridge=br-edge interface=ether2
