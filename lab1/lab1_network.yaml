@@ -49,7 +49,7 @@ topology:
       - sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y isc-dhcp-client iproute2 iputils-ping && sh /configs/pc2.sh"
 
   links:
-  - endpoints: ["R1:eth2", "SW1:eth1"]
+  - endpoints: ["R1:eth1", "SW1:eth1"]
   - endpoints: ["SW1:eth2", "SW2:eth1"]
   - endpoints: ["SW1:eth3", "SW3:eth1"]
   - endpoints: ["SW2:eth2", "PC1:eth1"]

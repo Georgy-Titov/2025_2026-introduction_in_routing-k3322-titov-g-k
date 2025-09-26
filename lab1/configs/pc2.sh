@@ -2,4 +2,4 @@
 set -e
 ip link set eth1 up
 
-dhclient -v eth1 || exit 0
+dhclient -v eth1 

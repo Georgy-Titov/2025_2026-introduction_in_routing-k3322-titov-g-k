@@ -13,7 +13,7 @@ add bridge=br-edge interface=ether1
 add bridge=br-edge interface=ether2
 
 /interface bridge vlan
-add bridge=br-edge vlan-ids=10 tagged=br-edge,ether1 untagged=ether2
+add bridge=br-edge vlan-ids=20 tagged=br-edge,ether1 untagged=ether2
 
 /interface bridge port
-set [find interface=ether2] pvid=10
+set [find interface=ether2] pvid=20

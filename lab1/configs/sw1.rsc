@@ -9,7 +9,7 @@ add name=vlan10 vlan-id=10 interface=br-trunk
 add name=vlan20 vlan-id=20 interface=br-trunk
 
 /interface bridge port
-add bridge=br-trunk interface=ether1  
+add bridge=br-trunk interface=ether1
 add bridge=br-trunk interface=ether2   
 add bridge=br-trunk interface=ether3   
 
