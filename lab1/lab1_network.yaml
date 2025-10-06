@@ -7,7 +7,7 @@ mgmt:
 topology:
   nodes:
     R1:
-      kind: vr-mikrotik_ros
+      kind: vr-ros
       image: vrnetlab/mikrotik_routeros:6.47.9
       mgmt-ipv4: 192.168.120.100
       startup-config: ./configs/r1.rsc
@@ -32,21 +32,21 @@ topology:
 
     PC1:
       kind: linux
-      image: debian:stable-slim
+      image:  alpine:latest
+      mgmt-ipv4: 192.168.120.5
       binds:
       - ./configs:/configs
-      mgmt-ipv4: 192.168.120.5
       exec:
-      - sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y isc-dhcp-client iproute2 iputils-ping && sh /configs/pc1.sh"
+      - sh /config/pc1.sh
 
     PC2:
       kind: linux
-      image: debian:stable-slim
+      image:  alpine:latest
+      mgmt-ipv4: 192.168.120.6
       binds:
       - ./configs:/configs
-      mgmt-ipv4: 192.168.120.6
       exec:
-      - sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y isc-dhcp-client iproute2 iputils-ping && sh /configs/pc2.sh"
+      - sh /config/pc1.sh
 
   links:
   - endpoints: ["R1:eth1", "SW1:eth1"]
