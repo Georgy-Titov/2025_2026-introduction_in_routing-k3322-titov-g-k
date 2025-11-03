@@ -1,7 +1,7 @@
 name: lab_1
 
 mgmt:
-  network: statics
+  network: lab_1_mgmt
   ipv4-subnet: 192.168.120.0/24
 
 topology:
@@ -15,25 +15,25 @@ topology:
     SW1:
       kind: vr-ros
       image: vrnetlab/mikrotik_routeros:6.47.9
-      mgmt-ipv4: 192.168.120.2
+      mgmt-ipv4: 192.168.120.101
       startup-config: ./configs/sw1.rsc
 
     SW2:
       kind: vr-ros
       image: vrnetlab/mikrotik_routeros:6.47.9
-      mgmt-ipv4: 192.168.120.3
+      mgmt-ipv4: 192.168.120.102
       startup-config: ./configs/sw2.rsc
 
     SW3:
       kind: vr-ros
       image: vrnetlab/mikrotik_routeros:6.47.9
-      mgmt-ipv4: 192.168.120.4
+      mgmt-ipv4: 192.168.120.103
       startup-config: ./configs/sw3.rsc
 
     PC1:
       kind: linux
       image:  alpine:latest
-      mgmt-ipv4: 192.168.120.5
+      mgmt-ipv4: 192.168.120.2
       binds:
       - ./configs:/configs
       exec:
@@ -42,7 +42,7 @@ topology:
     PC2:
       kind: linux
       image:  alpine:latest
-      mgmt-ipv4: 192.168.120.6
+      mgmt-ipv4: 192.168.120.3
       binds:
       - ./configs:/configs
       exec:
