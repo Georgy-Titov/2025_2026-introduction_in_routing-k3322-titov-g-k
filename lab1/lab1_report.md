@@ -43,59 +43,54 @@
 name: lab_1
 
 mgmt:
-  network: statics
-  ipv4-subnet: 192.168.120.0/24
+  network: lab1_mgmt
+  ipv4-subnet: 172.160.16.0/24
 
 topology:
+  kinds:
+    vr-ros:
+      image: vrnetlab/mikrotik_routeros:6.47.9
+  
   nodes:
     R1:
-      kind: vr-mikrotik_ros
-      image: vrnetlab/mikrotik_routeros:6.47.9
-      mgmt-ipv4: 192.168.120.1
-      startup-config: ./configs/r1.rsc
-
+      kind: vr-ros
+      mgmt-ipv4: 172.160.16.100
+      startup-config: configs/r1.rsc
     SW1:
       kind: vr-ros
-      image: vrnetlab/mikrotik_routeros:6.47.9
-      mgmt-ipv4: 192.168.120.2
-      startup-config: ./configs/sw1.rsc
-
+      mgmt-ipv4: 172.160.16.101
+      startup-config: configs/sw1.rsc
     SW2:
       kind: vr-ros
-      image: vrnetlab/mikrotik_routeros:6.47.9
-      mgmt-ipv4: 192.168.120.3
-      startup-config: ./configs/sw2.rsc
-
+      mgmt-ipv4: 172.160.16.102
+      startup-config: configs/sw2.rsc
     SW3:
       kind: vr-ros
-      image: vrnetlab/mikrotik_routeros:6.47.9
-      mgmt-ipv4: 192.168.120.4
-      startup-config: ./configs/sw3.rsc
-
+      mgmt-ipv4: 172.160.16.103
+      startup-config: configs/sw3.rsc
     PC1:
       kind: linux
       image: alpine:latest
+      mgmt-ipv4: 172.160.16.2
       binds:
-        - ./configs:/configs
-      mgmt-ipv4: 192.168.120.5
+      - ./configs:/configs
       exec:
-        - sh /configs/PC1.sh
-
+      - sh /configs/pc1.sh
     PC2:
       kind: linux
       image: alpine:latest
+      mgmt-ipv4: 172.160.16.3
       binds:
-        - ./configs:/configs
-      mgmt-ipv4: 192.168.120.6
+      - ./configs:/configs
       exec:
-        - sh /configs/PC2.sh
+      - sh /configs/pc2.sh
 
   links:
-    - endpoints: ["R1:eth1", "SW1:eth1"]
-    - endpoints: ["SW1:eth2", "SW2:eth1"]
-    - endpoints: ["SW1:eth3", "SW3:eth1"]
-    - endpoints: ["SW2:eth2", "PC1:eth1"]
-    - endpoints: ["SW3:eth2", "PC2:eth1"]
+  - endpoints: ["R1:eth1", "SW1:eth1"]
+  - endpoints: ["SW1:eth2", "SW2:eth1"]
+  - endpoints: ["SW1:eth3", "SW3:eth1"]
+  - endpoints: ["SW2:eth2", "PC1:eth1"]
+  - endpoints: ["SW3:eth2", "PC2:eth1"]
 ```
 
 Ниже можно ознакомиться с графическим представлением этой схемы (а также с разделением VLAN'ов):
