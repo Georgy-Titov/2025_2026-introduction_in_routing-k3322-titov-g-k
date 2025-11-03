@@ -14,5 +14,9 @@ add bridge=br-trunk interface=ether3
 add bridge=br-trunk interface=ether4   
 
 /interface bridge vlan
-add bridge=br-trunk vlan-ids=10 tagged=br-trunk,ether2,ether3
-add bridge=br-trunk vlan-ids=20 tagged=br-trunk,ether2,ether4
+add bridge=br-trunk tagged=br-trunk,ether2,ether3 vlan-ids=10
+add bridge=br-trunk tagged=br-trunk,ether2,ether4 vlan-ids=20
+
+/ip address
+add address=10.10.10.2/24 interface=vlan10
+add address=10.10.20.2/24 interface=vlan20
