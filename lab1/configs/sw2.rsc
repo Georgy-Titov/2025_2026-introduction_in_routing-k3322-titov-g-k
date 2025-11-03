@@ -2,17 +2,17 @@
 /user add name=georgy password=strongpass group=full
 
 /interface bridge
-add name=br-edge
+add name=bridge
 
-/interface vlan 
-add name=vlan10 vlan-id=10 interface=br-edge
+/interface vlan
+add name=vlan10 vlan-id=10 interface=bridge
 
 /interface bridge port
-add bridge=br-edge interface=ether2
-add bridge=br-edge interface=ether3 pvid=10
+add bridge=bridge interface=ether2
+add bridge=bridge interface=ether3 pvid=10
 
 /interface bridge vlan
-add bridge=br-edge vlan-ids=10 tagged=br-edge,ether2 untagged=ether3 vlan-ids=10
+add bridge=bridge tagged=bridge,ether2 untagged=ether3 vlan-ids=10
 
 /ip address
-add address=10.10.10.3/24 interface=vlan10
+add address=10.10.0.3/24 interface=vlan10
