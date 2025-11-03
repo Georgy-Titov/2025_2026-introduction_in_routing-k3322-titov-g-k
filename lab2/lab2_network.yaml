@@ -20,7 +20,7 @@ topology:
     R3-MSK:
       kind: vr-ros
       mgmt-ipv4: 172.160.16.102
-      startup-config: configs/r3-msk.rsc
+      startup-config: configs/r3-msc.rsc
     PC1:
       kind: linux
       image: alpine:latest
