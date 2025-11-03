@@ -10,8 +10,8 @@ add address=10.10.10.1/24 interface=vlan10
 add address=10.10.20.1/24 interface=vlan20
 
 /ip pool
-add name=dhcp_pool_vlan10 ranges=10.10.10.2-10.10.10.254
-add name=dhcp_pool_vlan20 ranges=10.10.20.2-10.10.20.254
+add name=dhcp_pool_vlan10 ranges=10.10.10.128-10.10.10.254
+add name=dhcp_pool_vlan20 ranges=10.10.20.128-10.10.20.254
 
 /ip dhcp-server
 add name=dhcp_vlan10 interface=vlan10 address-pool=dhcp_pool_vlan10 disabled=no
