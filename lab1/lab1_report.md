@@ -99,6 +99,8 @@ topology:
 
 Схема сделана в draw.io
 
+Также при помощи команды `clab graph -t <имя_лаборатории>` можно увидеть графическое представелние вашей сети. 
+
 ### Настройка маршрутизатора R1
 
 На маршрутизаторе `R1` настроены два VLAN-а — `VLAN 10` и `VLAN 20`. Каждый из этих VLAN используется для разделения трафика между двумя сегментами сети, к которым подключены `PC1` и `PC2`. Для каждого VLAN настроен DHCP-сервер, который автоматически раздаёт IP-адреса устройствам в соответствующих VLAN. Дополнительно был создан новый пользователь с административными правами и изменено имя устройства.
@@ -106,95 +108,133 @@ topology:
 Конфиг для настройки `R1`:
 
 ```
-/interface vlan
-add name=vlan10 vlan-id=10 interface=ether1
-add name=vlan20 vlan-id=20 interface=ether1
-/ip address
-add address=10.10.10.1/24 interface=vlan10
-add address=10.10.20.1/24 interface=vlan20
-/ip pool
-add name=dhcp_pool_vlan10 ranges=10.10.10.2-10.10.10.254
-add name=dhcp_pool_vlan20 ranges=10.10.20.2-10.10.20.254
-/ip dhcp-server
-add name=dhcp_vlan10 interface=vlan10 address-pool=dhcp_pool_vlan10 disabled=no
-add name=dhcp_vlan20 interface=vlan20 address-pool=dhcp_pool_vlan20 disabled=no
-/ip dhcp-server network
-add address=10.10.10.0/24 gateway=10.10.10.1
-add address=10.10.20.0/24 gateway=10.10.20.1
-/user add name=georgy password=admin group=full
 /system identity set name=R1-Router
+/user add name=georgy password=strongpass group=full
+
+/interface vlan
+add name=vlan10 vlan-id=10 interface=ether2
+add name=vlan20 vlan-id=20 interface=ether2
+
+/ip address
+add address=10.10.0.1/24 interface=vlan10
+add address=10.20.0.1/24 interface=vlan20
+
+/ip pool
+add name=dhcp-pool10 ranges=10.10.0.10-10.10.0.254
+add name=dhcp-pool20 ranges=10.20.0.10-10.20.0.254
+
+/ip dhcp-server
+add address-pool=dhcp-pool10 disabled=no interface=vlan10 name=dhcp-server10
+add address-pool=dhcp-pool20 disabled=no interface=vlan20 name=dhcp-server20
+
+/ip dhcp-server network
+add address=10.10.0.0/24 gateway=10.10.0.1
+add address=10.20.0.0/24 gateway=10.20.0.1
 ```
 
 ### Настройка коммутатора SW1
 
-На `SW1` добавлены VLAN-интерфейсы для разных портов и созданы мосты для `VLAN 10` и `VLAN 20`, обеспечивающие передачу трафика между соответствующими интерфейсами. Для каждого VLAN настроен клиент DHCP.
+На `SW1` добавлены VLAN-интерфейсы для разных портов и создан мост для `VLAN 10` и `VLAN 20`, обеспечивающий передачу трафика между соответствующими интерфейсами.
 
 Конфиг для настройки `SW1`:
 
 ```
-/interface vlan
-add name=vlan10_e1 vlan-id=10 interface=ether1
-add name=vlan20_e1 vlan-id=20 interface=ether1
-add name=vlan10_e2 vlan-id=10 interface=ether2
-add name=vlan20_e3 vlan-id=20 interface=ether3
-/interface bridge
-add name=br_v10
-add name=br_v20
-/interface bridge port
-add interface=vlan10_e1 bridge=br_v10
-add interface=vlan10_e2 bridge=br_v10
-add interface=vlan20_e1 bridge=br_v20
-add interface=vlan20_e3 bridge=br_v20
-/ip dhcp-client
-add disabled=no interface=br_v20
-add disabled=no interface=br_v10
-/user add name=georgy password=admin group=full
 /system identity set name=SW1-Switch
+/user add name=georgy password=strongpass group=full
+
+/interface bridge
+add name=bridge vlan-filtering=yes
+
+/interface vlan
+add name=vlan10 vlan-id=10 interface=bridge
+add name=vlan20 vlan-id=20 interface=bridge
+
+/interface bridge port
+add bridge=bridge interface=ether2
+add bridge=bridge interface=ether3
+add bridge=bridge interface=ether4
+
+/interface bridge vlan
+add bridge=bridge tagged=bridge,ether2,ether3 vlan-ids=10
+add bridge=bridge tagged=bridge,ether2,ether4 vlan-ids=20
+
+/ip address
+add address=10.10.0.2/24 interface=vlan10
+add address=10.20.0.2/24 interface=vlan20
 ```
 
 ### Настройка коммутаторов SW2 и SW3
 
-Конфигурация аналогична: VLAN-интерфейсы и мосты для своих портов, плюс DHCP-клиенты.
+Конфигурация аналогична: VLAN-интерфейсы и мост для своих портов.
 
 Пример конфига для настройки `SW2`:
 
 ```
-/interface vlan
-add name=vlan10_e1 vlan-id=10 interface=ether1
-add name=vlan10_e2 vlan-id=10 interface=ether2
-/interface bridge
-add name=br_v10
-/interface bridge port
-add interface=vlan10_e1 bridge=br_v10
-add interface=vlan10_e2 bridge=br_v10
-/ip dhcp-client
-add disabled=no interface=br_v10
-/user add name=georgy password=adminn group=full
 /system identity set name=SW2-Switch
+/user add name=georgy password=strongpass group=full
+
+/interface bridge
+add name=bridge
+
+/interface vlan
+add name=vlan10 vlan-id=10 interface=bridge
+
+/interface bridge port
+add bridge=bridge interface=ether2
+add bridge=bridge interface=ether3 pvid=10
+
+/interface bridge vlan
+add bridge=bridge tagged=bridge,ether2 untagged=ether3 vlan-ids=10
+
+/ip address
+add address=10.10.0.3/24 interface=vlan10
 ```
 
 ### Настройка конечных устройств PC1, PC2
 
-`PC1` и `PC2` настраиваются для работы в своих VLAN, создаются подинтерфейсы и задаются IP-адреса.
+Компьютерам добавляется интерфейс vlan через ip link, и udhcpc -i запрашивает на этот интерфейс айпи у dhcp сервера. Наконец, записывается ip route add 10.x0.0.0/24 via 10.x0.0.1 dev vlanx0, чтобы компьютеры видели друг друга в сети.
 
 Пример конфига для `PC1`:
 
 ```
 #!/bin/sh
+set -e
+
 ip link add link eth1 name vlan10 type vlan id 10
 ip link set vlan10 up
-dhclient vlan10
+udhcpc -i vlan10
+ip route add 10.20.0.0/24 via 10.10.0.1 dev vlan10
 ```
 
 Пример конфига для `PC2`:
 
 ```
 #!/bin/sh
+set -e
+
 ip link add link eth1 name vlan20 type vlan id 20
 ip link set vlan20 up
-dhclient vlan20
+udhcpc -i vlan20
+ip route add 10.10.0.0/24 via 10.20.0.1 dev vlan20
 ```
 
 ## Проверка работспособности сети
+
+Командой `clab deploy -t <имя_лаборатории>` производится деплой.
+
+![7IBLfTLA3Oi3Dpmr8kflYhqyfnlWKoBbMwwDSx9f9WincHoICFkNYQl-UpW19t6lo3iyoyTdoxbJAvgy30TLmpa8](https://github.com/user-attachments/assets/b3f1cf6f-fd35-4fb3-9cdd-a34baf80aa94)
+
+Далее при помощи команды `docker exec -it <имя_контейнера> sh` мы можем зайти в любой из контейнеров (устройств) в нашей сети. К роутеру и коммутаторам также можно подключиться по `ssh` - именно для этого мы и настраивали менеджмент сеть в нашей топологии.
+
+Давайте подключимся к PC1, а потом к PC2, чтобы проверить работоспособность нашей сети.
+
+![VCX2Ach_i9kp90veBk_ABDUeOV1uHJCReVb4xuGLgYt1eQXp5WMDXJeQYzLWTheUIx20HwmlW3KYjPltOgsR-vgH](https://github.com/user-attachments/assets/e0a05743-d780-4cf8-b36a-479bd71a9c26)
+
+Как можно увидеть PC1 видит PC2 - все ок.
+
+![N4fQlu2NvScK36FlF3uqQrlYuqsWCDvW_oo8_UH_vFyproLEgNI0jnLtiSbXaiSVoLVLzSSm3l1YdHS5Nnrqt3L6](https://github.com/user-attachments/assets/25c9389d-9e00-454f-8928-c2fb829e1023)
+
+В обратную сторону также все хорошо.
+
 
 ## Заключение
