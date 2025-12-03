@@ -1,7 +1,7 @@
 name: lab3
 mgmt:
-  network: lab3_mgmt
-  ipv4-subnet: 172.160.16.0/24
+  network: custom_mgmt
+  ipv4-subnet: 172.16.16.0/24
 
 topology:
   kinds:
@@ -11,32 +11,32 @@ topology:
   nodes:
     R01.SPB:
       kind: vr-ros
-      mgmt-ipv4: 172.160.16.101
+      mgmt-ipv4: 172.16.16.101
       startup-config: configs/r01-spb.rsc
     R01.HKI:
       kind: vr-ros
-      mgmt-ipv4: 172.160.16.102
+      mgmt-ipv4: 172.16.16.102
       startup-config: configs/r01-hki.rsc
-    R01.MSC:
+    R01.MSK:
       kind: vr-ros
-      mgmt-ipv4: 172.160.16.103
-      startup-config: configs/r01-msc.rsc
+      mgmt-ipv4: 172.16.16.103
+      startup-config: configs/r01-msk.rsc
     R01.LND:
       kind: vr-ros
-      mgmt-ipv4: 172.160.16.104
+      mgmt-ipv4: 172.16.16.104
       startup-config: configs/r01-lnd.rsc
     R01.LBN:
       kind: vr-ros
-      mgmt-ipv4: 172.160.16.105
+      mgmt-ipv4: 172.16.16.105
       startup-config: configs/r01-lbn.rsc
     R01.NY:
       kind: vr-ros
-      mgmt-ipv4: 172.160.16.106
+      mgmt-ipv4: 172.16.16.106
       startup-config: configs/r01-ny.rsc
     PC1:
       kind: linux
       image: alpine:latest
-      mgmt-ipv4: 172.160.16.2
+      mgmt-ipv4: 172.16.16.2
       binds:
         - ./configs:/configs
       exec:
@@ -44,20 +44,22 @@ topology:
     SGI-PRISM:
       kind: linux
       image: alpine:latest
-      mgmt-ipv4: 172.160.16.3
+      mgmt-ipv4: 172.16.16.3
       binds:
         - ./configs:/configs
       exec:
         - sh /configs/sgi.sh
 
+
   links:
     - endpoints: ["R01.SPB:eth1","R01.HKI:eth1"]
-    - endpoints: ["R01.SPB:eth2","R01.MSC:eth1"]
+    - endpoints: ["R01.SPB:eth2","R01.MSK:eth1"]
     - endpoints: ["R01.SPB:eth3","PC1:eth1"]
     - endpoints: ["R01.HKI:eth2","R01.LBN:eth2"]
     - endpoints: ["R01.HKI:eth3","R01.LND:eth1"]
-    - endpoints: ["R01.MSC:eth2","R01.LBN:eth1"]
+    - endpoints: ["R01.MSK:eth2","R01.LBN:eth1"]
     - endpoints: ["R01.LND:eth2","R01.NY:eth1"]
     - endpoints: ["R01.LBN:eth3","R01.NY:eth2"]
     - endpoints: ["R01.NY:eth3", "SGI-PRISM:eth1"]
+    
     
