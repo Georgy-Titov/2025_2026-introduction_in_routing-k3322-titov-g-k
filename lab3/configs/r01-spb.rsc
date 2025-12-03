@@ -60,3 +60,4 @@ add disabled=no name=SGIPC remote-peer=10.255.255.6 cisco-style=yes cisco-style-
 /interface bridge port
 add interface=ether2 bridge=vpn
 add interface=SGIPC bridge=vpn
+ 
