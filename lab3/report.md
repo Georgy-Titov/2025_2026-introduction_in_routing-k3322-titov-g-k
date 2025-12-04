@@ -32,5 +32,113 @@
 * Назначить адресацию на контейнеры, связанные между собой EoMPLS.
 * Настроить имена устройств, сменить логины и пароли.
 
+## Схема топологии сети
+
+<img width="1254" height="577" alt="image" src="https://github.com/user-attachments/assets/2365e0fc-5229-4683-802b-80833d7fe9fa" />
+
+
+Сама топология сети повторяет структуру топологий из предыдущих лабораторных работ. Только в этот раз будет развернуто 6 маршрутизаторов, один пользовательский компьютер и один хост, выполняющий роль SGI.
+
+Для управления используется подсеть: 172.160.16.0/24.
 
 ## Выполнение работы
+
+### Конфигурация маршрутизаторов
+
+Конфигурации маршрутизаторов будут примерно схожи за исключением R0.SPB, R0.NY - так как на них мы ее настраивали DHCP-сервер, подключали клиентов и настраивали VPLS (EoMPLS). Разбирать конфигурацию марщрутизаторов будем на примере R0.SPB:
+
+```
+/user 
+add name=georgy password=strongpass group=full 
+remove admin
+/system identity set name=R01.SPB
+```
+
+* Как нас просили в задание - удаляем дефолтного пользователя `admin` и создаем нового пользователя `georgy` с паролем. Также задаем имя для нашего роуетера.
+
+```
+add address=10.20.1.1/30 interface=ether2 
+add address=10.20.2.1/30 interface=ether
+add address=192.168.10.1/24 interface=ether4
+```
+
+* Указываем ip-адреса на физических портах нашего маршрутизтора.
+
+```
+/ip pool add name=dhcp-pool ranges=192.168.10.10-192.168.10.100
+/ip dhcp-server add address-pool=dhcp-pool disabled=no interface=ether4 name=dhcp-server
+/ip dhcp-server network add address=192.168.10.0/24 gateway=192.168.10.1
+```
+
+* Создаем и настраиваем DHCP-сервер, чтобы наши устойства динамически получали ip-адреса.
+
+```
+/interface bridge
+add name=loopback
+
+/ip address 
+add address=10.255.255.X/32 interface=loopback network=10.255.255.X
+```
+
+* Cоздаём loopback интерфейс через, который обеспечивает стабильный IP-адрес, не зависящий от физических интерфейсов. По данному виртуальному интерфейсу будет происходить обмен данными по протоколу OSPF.
+
+```
+/routing ospf instance
+add name=inst router-id=10.255.255.X
+
+/routing ospf area
+add name=backbonev2 area-id=0.0.0.0 instance=inst
+
+/routing ospf network
+add area=backbonev2 network=10.20.X.0/30
+add area=backbonev2 network=192.168.X.0/24
+add area=backbonev2 network=10.255.255.X/32 
+```
+
+* Далее мы создаем OSPF-инстанс — независимый процесс маршрутизации OSPF. Создаем OSPF-Area — область маршрутизации. Мы включаем интерфейсы в OSPF по IP-префиксам.
+
+```
+/mpls ldp
+set lsr-id=10.255.255.X
+set enabled=yes transport-address=10.255.255.X
+
+/mpls ldp advertise-filter 
+add prefix=10.255.255.0/24 advertise=yes
+add advertise=no
+
+/mpls ldp accept-filter 
+add prefix=10.255.255.0/24 accept=yes
+add accept=no
+
+/mpls ldp interface
+add interface=ether2
+add interface=ether3
+```
+
+* Устанавливаем уникальный MPLS Router-ID. Включаем MPLS LDP. Указываем адрес для установления LDP соседства. Включение LDP на интерфейсах.
+
+```
+/interface bridge
+add name=vpn
+
+/interface vpls
+add disabled=no name=SGIPC remote-peer=10.255.255.6 cisco-style=yes cisco-style-id=0
+
+/interface bridge port
+add interface=ether2 bridge=vpn
+add interface=SGIPC bridge=vpn
+```
+
+* Создали виртуальный коммутатор (bridge) для объединения L2. Подключили к нему локальный порт и VPLS интерфейс. Фреймы между SPB и NY теперь проходят по MPLS LSP, а на каждом PE "выходят" в локальный bridge. Теперь клиент из SPB и клиент из NY в одной VLAN, хоть они физически находятся в разных городах.
+
+### Конфигурация конечных устройств (На примере PC1)
+
+Тут все по старинке, как в предыдущих работых.
+
+```
+#!/bin/sh
+ip route del default via 172.160.16.1 dev eth0
+udhcpc -i eth1
+```
+
+## Проверка работоспособности
