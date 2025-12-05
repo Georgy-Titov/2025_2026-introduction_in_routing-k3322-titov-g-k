@@ -142,3 +142,30 @@ udhcpc -i eth1
 ```
 
 ## Проверка работоспособности
+
+### OSPF
+
+![UlmBmqZ2ManIXvdCBXgupBVn2SPjWqTIGgABT3mEj6UgUxOT15buwPEPtTLjIXO6ZPVJ2amEXZeGVPV_HMySY0R3](https://github.com/user-attachments/assets/2c10e550-5530-4c2b-a797-02fd9e8a42e0)
+
+Проверка таблиц маршрутизации подтверждает, что маршруты распространяются динамически — никаких статических маршрутов не используется.
+
+### MPLS
+
+![E-AjrZ4-fJeVhTxlG4nCKjiE963Khlq7uFZIVrfu-gzVIWoAnR4U7IzYIG74hgnzrhenlpSXnuoxjSWDS766OSri](https://github.com/user-attachments/assets/b0092d0d-f089-4c36-a718-8f6d62070912)
+
+### VPLS (EoMPLS)
+
+![iNn2vpyuetHgAeehr2jXEQrbNA26CPsmoafCx2NY6_myYc8gxbVnvzVcwiyEyWFXhSTrbeDP6OVct5qxrU6CN5UN](https://github.com/user-attachments/assets/72a56ac2-7e75-4dea-abc7-bcd144440f94)
+
+VPLS-туннель между NY и SPB успешно поднят, компьютеры на его концах оказываются в одной L2-домене и могут взаимодействовать напрямую.
+
+### Проверка доступности двух узлов
+
+![O5w7d7MypTQGQXYOqxhqUavuhGQHS9kV9IGvHXczySV-kP-JuEaPk7Jt2Nk-HJNcjCvEIfhgOZE2ylsVBQNC7QD2](https://github.com/user-attachments/assets/14dd2ec6-902c-44db-b367-42c979af50fb)
+
+## Вывод
+
+В рамках данной лабораторной работы была построена и настроена сеть IP/MPLS: реализована динамическая маршрутизация с использованием протокола OSPF, поверх которой активированы механизмы MPLS, а также организован VPLS-туннель между маршрутизаторами локаций Нью-Йорк и Санкт-Петербург.
+
+Работоспособность всех сервисов подтверждена, задачи выполнены в полном объёме, цель работы достигнута.
+
