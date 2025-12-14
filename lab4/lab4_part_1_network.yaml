@@ -12,51 +12,51 @@ topology:
     R01.SPB:
       kind: vr-ros
       mgmt-ipv4: 172.161.16.101
-      startup-config: config/part1/r01-spb.rsc
+      startup-config: configs/part_1/spb.rsc
     R01.HKI:
       kind: vr-ros
       mgmt-ipv4: 172.161.16.102
-      startup-config: config/part1/r01-hki.rsc
+      startup-config: configs/part_1/hki.rsc
     R01.SVL:
       kind: vr-ros
       mgmt-ipv4: 172.161.16.103
-      startup-config: config/part1/r01-svl.rsc
+      startup-config: configs/part_1/svl.rsc
     R01.LND:
       kind: vr-ros
       mgmt-ipv4: 172.161.16.104
-      startup-config: config/part1/r01-lnd.rsc
+      startup-config: configs/part_1/lnd.rsc
     R01.LBN:
       kind: vr-ros
       mgmt-ipv4: 172.161.16.105
-      startup-config: config/part1/r01-lbn.rsc
+      startup-config: configs/part_1/lbn.rsc
     R01.NY:
       kind: vr-ros
       mgmt-ipv4: 172.161.16.106
-      startup-config: config/part1/r01-ny.rsc
+      startup-config: configs/part_1/ny.rsc
     PC1:
       kind: linux
       image: alpine:latest
       mgmt-ipv4: 172.161.16.2
       binds:
-        - ./config:/config
+        - ./configs/part_1/:/configs/part_1/
       exec:
-        - sh /config/pc.sh
+        - sh /configs/part_1/pc.sh
     PC2:
       kind: linux
       image: alpine:latest
       mgmt-ipv4: 172.161.16.3
-      binds:
-        - ./config:/config
+       binds:
+        - ./configs/part_1/:/configs/part_1/
       exec:
-        - sh /config/pc.sh
+        - sh /configs/part_1/pc.sh
     PC3:
       kind: linux
       image: alpine:latest
       mgmt-ipv4: 172.161.16.4
-      binds:
-        - ./config:/config
+       binds:
+        - ./configs/part_1/:/configs/part_1/
       exec:
-        - sh /config/pc.sh
+        - sh /configs/part_1/pc.sh
 
 
   links:
