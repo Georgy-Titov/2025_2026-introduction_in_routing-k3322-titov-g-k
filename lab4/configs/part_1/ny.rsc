@@ -46,6 +46,6 @@ add name=br100
 /ip address
 add address=10.100.1.2/32 interface=br100
 /ip route vrf
-add export-route-targets=65000:100 import-route-targets=65000:100 interfaces=br100 route-distinguisher=65000:100 routing-mark=VRF_DEVOPS
+add export-route-targets=65000:100 import-route-targets=65000:100 interfaces=br100 route-distinguisher=65000:100 routing-mark=VRF
 /routing bgp instance vrf
-add redistribute-connected=yes routing-mark=VRF_DEVOPS
+add redistribute-connected=yes routing-mark=VRF

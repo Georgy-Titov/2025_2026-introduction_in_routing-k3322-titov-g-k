@@ -45,7 +45,7 @@ topology:
       kind: linux
       image: alpine:latest
       mgmt-ipv4: 172.161.16.3
-       binds:
+      binds:
         - ./configs/part_1/:/configs/part_1/
       exec:
         - sh /configs/part_1/pc.sh
@@ -53,7 +53,7 @@ topology:
       kind: linux
       image: alpine:latest
       mgmt-ipv4: 172.161.16.4
-       binds:
+      binds:
         - ./configs/part_1/:/configs/part_1/
       exec:
         - sh /configs/part_1/pc.sh

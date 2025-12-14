@@ -28,7 +28,7 @@ topology:
     R01.LBN:
       kind: vr-ros
       mgmt-ipv4: 172.162.16.105
-      startup-config: configs/part_2/-lbn.rsc
+      startup-config: configs/part_2/172lbn.rsc
     R01.NY:
       kind: vr-ros
       mgmt-ipv4: 172.162.16.106
