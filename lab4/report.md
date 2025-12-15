@@ -50,6 +50,8 @@
 
 ## Схема топологии сети
 
+<img width="908" height="574" alt="image" src="https://github.com/user-attachments/assets/d1b6dc0e-25db-4576-b4fa-9b7ded1f99ac" />
+
 Для управления используется подсеть: 172.160.16.0/24.
 
 ## Выполнение работы
