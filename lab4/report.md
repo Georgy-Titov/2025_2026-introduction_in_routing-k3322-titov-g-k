@@ -211,4 +211,40 @@ udhcpc -i eth1
 
 ## Проверка работоспособности
 
+### OSPF
+
+![lm7t20rf4HqBCeZwxafSFAgGitcKRzmJAieg4oJN0jppHO-ypUy6cGupj25_A3s-yKOAEh_RTTL-BeCR7SddMXM5](https://github.com/user-attachments/assets/33ad66b6-e959-47ce-ae68-c6af3b3d390d)
+
+Все маршруты получены динамически, без использования статических записей. OSPF настроен правильно.
+
+### MPLS
+
+![04cgnFYEMSt5tRZdT79zJ9GPMJfb3RLI2uoOGCJ4CBUBMdDLwqvV8iM4nJLhKVUpVerwG9Hrg1pd1tmWHYsKOCKi](https://github.com/user-attachments/assets/cee0f292-896f-48b2-b784-686a1bfc2fe9)
+
+MPLS функционирует корректно, метки распространяются между маршрутизаторами.
+
+### iBGP
+
+### VRF
+
+![eARS2e9wYkljEwgTFfLAPZKPA0Y0819vg_G0WYm9_EBts3P1EdTVHvsPgo7tl_WXG8icoDcXbqseNpNbOdK50onL](https://github.com/user-attachments/assets/b017ae9b-f828-47bb-997c-9dc8928ad349)
+
+На граничных маршрутизаторах успешно добавлены VRF-маршруты.
+
+### VPLS (Часть 2)
+
+![5L_X8tzubcHg3jigJucar0K9me34S4hb_zeLbJIxWhT2w78goUg7TU0DtgwwCCUTjNeTVYVyR97C0skELKmmn7Gp](https://github.com/user-attachments/assets/1b8283b4-47e0-4a82-95ce-8f2006df6cbd)
+
+Успешная раздача айпи-адресов через dhcp-сервер на SPB роутере.
+
+![NPMUGTp9faKxHRni4Fz0Yj77gtEmHRMZCLYSC252_WP231eMy1O5X1LNCNXIbuEkIstOa8ldGtkw_CZ6fj-yKSMr](https://github.com/user-attachments/assets/dc6748c0-ad5a-4517-a647-2ddebd85fd11)
+
+![KwKh6jWn2ZgvFLsWVcowZCcP-Z8D6-rbMAqkaJHltiuPRnuBT7pMnDPpnPN6KCJE38xm1DuRLS5_g1ULOqBTdsvy](https://github.com/user-attachments/assets/91dbb49f-485d-431e-bd02-4ad4391cd3ef)
+
+![HNUPxG6T6UjCEqYnjPquF4OKpHUrst6TmvFo8LCDIGs2FUkYOhyPKaX7yg4Lk05ExdpChRYK5ISVfE_MNBLjKhWs](https://github.com/user-attachments/assets/77f28aa7-ae72-46f0-929c-98fb68d48814)
+
+Пиги между компьютерами.
+
 ## Выводы
+
+В рамках лабораторной работы была построена и настроена IP/MPLS-сеть. В ходе работы успешно реализована внутренняя маршрутизация с использованием OSPF, настроена передача трафика по MPLS, а также организован обмен маршрутной информацией по iBGP с применением Route Reflector. В первой части работы была реализована услуга L3VPN на базе VRF, во второй части — услуга VPLS, обеспечивающая объединение территориально распределённых сегментов в одну широковещательную доменную сеть.
