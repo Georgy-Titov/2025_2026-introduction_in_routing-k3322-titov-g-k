@@ -18,3 +18,7 @@
 [Лабораторная работа №1 - "Установка ContainerLab и развертывание тестовой сети связи".](https://github.com/Georgy-Titov/2025_2026-introduction_in_routing-k3322-titov-g-k/blob/main/lab1/lab1_report.md)
 
 [Лабораторная работа №2 - "Эмуляция распределенной корпоративной сети связи, настройка статической маршрутизации между филиалами".](https://github.com/Georgy-Titov/2025_2026-introduction_in_routing-k3322-titov-g-k/blob/main/lab2/lab2_report.md)
+
+[Лабораторная работа №3 - "Эмуляция распределенной корпоративной сети связи, настройка OSPF и MPLS, организация первого EoMPLS".](https://github.com/Georgy-Titov/2025_2026-introduction_in_routing-k3322-titov-g-k/blob/main/lab3/report.md)
+
+[Лабораторная работа №4 - "Эмуляция распределенной корпоративной сети связи, настройка iBGP, организация L3VPN, VPLS".](https://github.com/Georgy-Titov/2025_2026-introduction_in_routing-k3322-titov-g-k/blob/main/lab4/report.md)
